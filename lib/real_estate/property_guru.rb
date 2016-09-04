@@ -1,14 +1,70 @@
+require 'cgi'
+
 module RealEstate
   class PropertyGuru
     ROOT = 'http://www.propertyguru.com.sg'
+    PROPERTY_LIST = '/singapore-property-listing/property-for-sale'
+
     def self.district
       districts = []
       page = Nokogiri::HTML(HTTParty.get(ROOT + "/"))
       page.css("div.param-district_code label").each do |node|
-        districts.push(node.text)
+        code = node.css('input')[0]['value']
+        text = node.text
+        districts.push({code: code, text: text})
       end
 
       districts
     end
+
+    def self.properties(district)
+      properties = []
+      query = {
+        "market" => "residential", 
+        "freetext" => district[:text], 
+        "district_code[]" => district[:code]
+      }
+      query_str = query.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}" }.join("&")
+      page = Nokogiri::HTML(HTTParty.get(ROOT + PROPERTY_LIST + "?" + query_str))
+      page.css('div.listing-list li.listing-item').each do |property_node|
+        properties.push(self.get_property_info(property_node))
+      end
+
+      properties
+    end
+
+    def self.get_property_info(property_node)
+      id = location = type = tenure = href = ""
+
+      property_node.at_css('li.listing-item').each do |attr_name, attr_value|
+        if attr_name == "class"
+          # <li class="listing-item featured-listing  listing-id-12547831 ">
+          attr_value.split(" ").each do |x|
+            id = x.delete("listing-id-") if x.start_with?("listing-id-")
+          end
+        end 
+      end
+
+      loation = property_node.at_css('div.listing-info p.listing-location span').text
+      type = property_node.at_css('div.listing-info span.lst-ptype').text
+      tenure = property_node.at_css('div.listing-info span.lst-tenure').text[/\d+/]
+      href = property_node.at_css('div.listing-img a')['href']
+      {
+        id: id,
+        location: location,
+        type: type,
+        tenure: tenure,
+        href: href
+      }
+    end
+
+#/singapore-property-listing/property-for-sale?autocomplete=%7B%22objectId%22%3A%22201%22%2C%22objectType%22%3A%22PROPERTY%22%2C%22properties%22%3A%7B%22propertyTypeGroup%22%3A%22CONDO%22%2C%22district%22%3A%22D15%22%7D%7D&unselected=PROPERTY%7C201&property_id%5B%5D=201&district_code%5B%5D=D15&market=residential&freetext=D15+East+Coast+%2F+Marine+Parade
+
+
+#{"objectId":"201","objectType":"PROPERTY","properties":{"propertyTypeGroup":"CONDO","district":"D15"}}
+
+
+#/singapore-property-listing/property-for-sale?market=residential&freetext=D01+Boat+Quay+%2F+Raffles+Place+%2F+Marina&district_code%5B%5D=D01
+
   end
 end
