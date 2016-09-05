@@ -98,6 +98,13 @@ EOF
   <li class="listing-item  listing-id-17144212 "><div></div></li>
 </div>
 EOF
+
+    @properties_num =<<EOF
+<h1 class="title search-title">
+    <span>2,130</span> Property for Sale in Singapore, in Boat Quay / Raffles Place / Marina.
+    <a href="/save-search?freetext=D01+Boat+Quay+/+Raffles+Place+/+Marina&amp;district_code%5B0%5D=D01&amp;listing_type=sale&amp;alert=1" id="alert-create-alert-button" class="create-alert" rel="nofollow">Create Alert</a>.
+</h1>
+EOF
   end
 
   def test_district
@@ -115,6 +122,11 @@ EOF
         assert_equal "info" * 6, RealEstate::PropertyGuru.properties({text: "D15", code: "D15"}).join
       end
     end
+  end
+
+  def test_total_properties_num
+    page_node = Nokogiri::HTML(@properties_num)
+    assert_equal 2130, RealEstate::PropertyGuru.total_properties_num(page_node)
   end
 
   def test_get_property_info

@@ -33,6 +33,10 @@ module RealEstate
       properties
     end
 
+    def self.total_properties_num(page_node)
+      page_node.at_css('h1.search-title span').text.delete(",").to_i
+    end
+
     def self.get_property_info(property_node)
       id = location = type = tenure = href = ""
 
@@ -58,12 +62,8 @@ module RealEstate
       }
     end
 
-#/singapore-property-listing/property-for-sale?autocomplete=%7B%22objectId%22%3A%22201%22%2C%22objectType%22%3A%22PROPERTY%22%2C%22properties%22%3A%7B%22propertyTypeGroup%22%3A%22CONDO%22%2C%22district%22%3A%22D15%22%7D%7D&unselected=PROPERTY%7C201&property_id%5B%5D=201&district_code%5B%5D=D15&market=residential&freetext=D15+East+Coast+%2F+Marine+Parade
-
-
-#{"objectId":"201","objectType":"PROPERTY","properties":{"propertyTypeGroup":"CONDO","district":"D15"}}
-
-
 #/singapore-property-listing/property-for-sale?market=residential&freetext=D01+Boat+Quay+%2F+Raffles+Place+%2F+Marina&district_code%5B%5D=D01
+#/singapore-property-listing/property-for-sale/2?freetext=D01+Boat+Quay+%2F+Raffles+Place+%2F+Marina&district_code%5B0%5D=D01
   end
 end
+
