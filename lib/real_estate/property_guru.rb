@@ -45,7 +45,7 @@ module RealEstate
         end 
       end
 
-      loation = property_node.at_css('div.listing-info p.listing-location span').text
+      location = property_node.at_css('div.listing-info p.listing-location span').text
       type = property_node.at_css('div.listing-info span.lst-ptype').text
       tenure = property_node.at_css('div.listing-info span.lst-tenure').text[/\d+/]
       href = property_node.at_css('div.listing-img a')['href']
@@ -65,5 +65,5 @@ module RealEstate
 
 
 #/singapore-property-listing/property-for-sale?market=residential&freetext=D01+Boat+Quay+%2F+Raffles+Place+%2F+Marina&district_code%5B%5D=D01
-
+  end
 end
