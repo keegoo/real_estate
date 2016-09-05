@@ -87,6 +87,17 @@ EOF
   </div>
 </li>
 EOF
+
+    @property_list =<<EOF
+<div class="listing-list">
+  <li class="listing-item featured-company-listing  listing-id-20109700 "><div></div></li>
+  <li class="listing-item featured-company-listing  listing-id-20109679 "><div></div></li>
+  <li class="listing-item  listing-id-19636039 "><div></div></li>
+  <li class="listing-item  listing-id-20029146 "><div></div></li>
+  <li class="listing-item  listing-id-20232926 "><div></div></li>
+  <li class="listing-item  listing-id-17144212 "><div></div></li>
+</div>
+EOF
   end
 
   def test_district
@@ -94,6 +105,15 @@ EOF
       assert_equal 28, RealEstate::PropertyGuru.district.size
       assert_equal "D28 Seletar / Yio Chu Kang", RealEstate::PropertyGuru.district[27][:text]
       assert_equal "D28", RealEstate::PropertyGuru.district[27][:code]
+    end
+  end
+
+  def test_properties
+    HTTParty.stub :get, @property_list do
+      RealEstate::PropertyGuru.stub :get_property_info, "info" do
+        assert_equal 6, RealEstate::PropertyGuru.properties({text: "D15", code: "D15"}).size
+        assert_equal "info" * 6, RealEstate::PropertyGuru.properties({text: "D15", code: "D15"}).join
+      end
     end
   end
 
