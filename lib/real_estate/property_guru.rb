@@ -46,7 +46,7 @@ module RealEstate
           attr_value.split(" ").each do |x|
             id = x.delete("listing-id-") if x.start_with?("listing-id-")
           end
-        end 
+        end
       end
 
       location = property_node.at_css('div.listing-info p.listing-location span').text
