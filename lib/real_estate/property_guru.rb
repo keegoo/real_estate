@@ -1,5 +1,18 @@
 require 'cgi'
 
+# ################################
+# a = RealEstate.PropertyGuru.new
+#
+# a.districts # [xx, yy]
+#
+# a.districts.each{|x|
+#   pages = x.pages
+#   x.properties({page: 1}) # [xx, yy]
+# }
+#
+# properties.each{|x| x.to_json}
+# ################################
+
 module RealEstate
   class PropertyGuru
     ROOT = 'http://www.propertyguru.com.sg'
