@@ -16,7 +16,7 @@ module RealEstate
     #   "district_code[]" => "D28"
     # }
     def self.pages_count(district)
-      query = district.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}" }.join("&")
+      query = query_str(district)
 
       HTTParty.get(ROOT + "/singapore-property-listing/property-for-sale?" + query)
     end
@@ -27,12 +27,18 @@ module RealEstate
     # 
     # page = 1
     def self.page(district, page)
-      query = district.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}" }.join("&")
+      query = query_str(district)
 
       HTTParty.get(ROOT + "/singapore-property-listing/property-for-sale/#{page}?" + query)
     end
 
     def self.property(id)
+    end
+
+    private
+
+    def self.query_str(hash)
+      hash.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}"}.join("&")
     end
   end
 end
