@@ -54,6 +54,14 @@ EOF
       assert_equal "D15", dct.code
       assert_equal "some text", dct.freetext
       assert_equal 2130, dct.pages
+
+      assert_raises ArgumentError do
+        dct = RealEstate::District.new("D15", nil)
+      end
+
+      assert_raises ArgumentError do
+        dct = RealEstate::District.new(nil, nil)
+      end
     end
   end
 end

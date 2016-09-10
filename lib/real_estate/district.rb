@@ -6,6 +6,7 @@ module RealEstate
     attr_reader :code, :freetext, :pages
 
     def initialize(code, freetext)
+      raise ArgumentError, "code or freetext cannot be nil" if code == nil || freetext == nil
       @code, @freetext = code, freetext
 
       @pages = get_pages_count()
