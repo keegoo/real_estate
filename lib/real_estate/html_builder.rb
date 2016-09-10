@@ -18,10 +18,7 @@ module RealEstate
     def self.pages_count(district)
       query = district.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}" }.join("&")
 
-      HTTParty.get( ROOT 
-                    + "/singapore-property-listing/property-for-sale"
-                    + "?"
-                    + query )
+      HTTParty.get(ROOT + "/singapore-property-listing/property-for-sale?" + query)
     end
 
     # parameter example:
@@ -32,10 +29,7 @@ module RealEstate
     def self.page(district, page)
       query = district.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}" }.join("&")
 
-      HTTParty.get( ROOT
-                    + "/singapore-property-listing/property-for-sale"
-                    + "/#{page}?"
-                    + query )
+      HTTParty.get(ROOT + "/singapore-property-listing/property-for-sale/#{page}?" + query)
     end
 
     def self.property(id)

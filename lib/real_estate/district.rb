@@ -2,6 +2,9 @@ require 'nokogiri'
 
 module RealEstate
   class District
+
+    attr_reader :code, :freetext, :pages
+
     def initialize(code, freetext)
       @code, @freetext = code, freetext
 
