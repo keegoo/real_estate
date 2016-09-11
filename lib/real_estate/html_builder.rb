@@ -45,8 +45,8 @@ module RealEstate
     def self.get(url)
       if RealEstate::FIDDLER_PROXY_ENABLED
         options = {
-          http_proxyaddr: '127.0.0.1',
-          http_proxyport: 8888
+          http_proxyaddr: "127.0.0.1",
+          http_proxyport: "8888"
         }
         HTTParty.get(url, options)
       else

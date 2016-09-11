@@ -17,5 +17,5 @@ require_relative "real_estate/property.rb"
 # #################################
 module RealEstate
   # Your code goes here...
-  FIDDLER_PROXY_ENABLED = false
+  FIDDLER_PROXY_ENABLED = true
 end

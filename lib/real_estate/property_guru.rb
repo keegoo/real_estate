@@ -5,6 +5,7 @@ module RealEstate
     def districts
       x = []
       page = Nokogiri::HTML(HTMLBuilder.districts)
+      puts page.text
       page.css("div.param-district_code label").each do |node|
         code = node.css('input')[0]['value']
         freetext = node.text
