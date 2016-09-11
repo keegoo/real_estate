@@ -1,9 +1,9 @@
-require "real_estate/version"
+require_relative "real_estate/version.rb"
 
-require "real_estate/property_guru.rb"
-require "real_estate/district.rb"
-require "real_estate/html_builder.rb"
-require "real_estate/property.rb"
+require_relative "real_estate/property_guru.rb"
+require_relative "real_estate/district.rb"
+require_relative "real_estate/html_builder.rb"
+require_relative "real_estate/property.rb"
 
 # ########## code sample ##########
 # a = RealEstate.PropertyGuru.new
@@ -17,4 +17,5 @@ require "real_estate/property.rb"
 # #################################
 module RealEstate
   # Your code goes here...
+  FIDDLER_PROXY_ENABLED = false
 end
