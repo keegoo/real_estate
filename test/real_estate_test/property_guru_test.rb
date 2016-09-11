@@ -2,7 +2,7 @@ require '../test_helper'
 
 class PropertyGuruTest < Minitest::Test
   def setup
-    @dist_str1 =<<EOF
+    @districts_str1 =<<EOF
 <div class="dropdown-menu dropdown-multi-step dropdown-menu-right" role="menu">
   <div class="step-pane param-district_code step-pane-last">
     <ul class="step-options">
@@ -41,57 +41,14 @@ class PropertyGuruTest < Minitest::Test
 </div>
 </div>
 EOF
-
-
-
-    @property_list =<<EOF
-<div class="listing-list">
-  <li class="listing-item featured-company-listing  listing-id-20109700 "><div></div></li>
-  <li class="listing-item featured-company-listing  listing-id-20109679 "><div></div></li>
-  <li class="listing-item  listing-id-19636039 "><div></div></li>
-  <li class="listing-item  listing-id-20029146 "><div></div></li>
-  <li class="listing-item  listing-id-20232926 "><div></div></li>
-  <li class="listing-item  listing-id-17144212 "><div></div></li>
-</div>
-EOF
-
-    @properties_num =<<EOF
-<h1 class="title search-title">
-    <span>2,130</span> Property for Sale in Singapore, in Boat Quay / Raffles Place / Marina.
-    <a href="/save-search?freetext=D01+Boat+Quay+/+Raffles+Place+/+Marina&amp;district_code%5B0%5D=D01&amp;listing_type=sale&amp;alert=1" id="alert-create-alert-button" class="create-alert" rel="nofollow">Create Alert</a>.
-</h1>
-EOF
   end
 
   def test_district
-    HTTParty.stub :get, @dist_str1 do
-      assert_equal 28, RealEstate::PropertyGuru.district.size
-      assert_equal "D28 Seletar / Yio Chu Kang", RealEstate::PropertyGuru.district[27][:text]
-      assert_equal "D28", RealEstate::PropertyGuru.district[27][:code]
+    a = RealEstate::PropertyGuru.new
+    RealEstate::HTMLBuilder.stub :districts, @districts_str1 do
+      assert_equal 28, a.districts.size
+      assert_equal "D28 Seletar / Yio Chu Kang", a.districts[27].freetext
+      assert_equal "D28", a.districts[27].code
     end
-  end
-
-  def test_properties
-    HTTParty.stub :get, @property_list do
-      RealEstate::PropertyGuru.stub :get_property_info, "info" do
-        assert_equal 6, RealEstate::PropertyGuru.properties({text: "D15", code: "D15"}).size
-        assert_equal "info" * 6, RealEstate::PropertyGuru.properties({text: "D15", code: "D15"}).join
-      end
-    end
-  end
-
-  def test_total_properties_num
-    page_node = Nokogiri::HTML(@properties_num)
-    assert_equal 2130, RealEstate::PropertyGuru.total_properties_num(page_node)
-  end
-
-  def test_get_property_info
-    property_node = Nokogiri::HTML(@property_str1)
-    property = RealEstate::PropertyGuru.get_property_info(property_node)
-    assert_equal "12547831", property[:id]
-    assert_equal "Condominium", property[:type]
-    assert_equal "5a Shenton Way", property[:location]
-    assert_equal "99", property[:tenure]
-    assert_equal "/listing/12547831/for-sale-five-on-shenton-v-on-shenton-2-to-agents?ref=ls%7Cfl%7C1%7C1", property[:href]
   end
 end
