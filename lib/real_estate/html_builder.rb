@@ -33,6 +33,7 @@ module RealEstate
     end
 
     def self.property(id)
+      HTTParty.get(ROOT + "/listing/" + "#{id}")
     end
 
     private
