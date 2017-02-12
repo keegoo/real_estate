@@ -13,8 +13,8 @@ module RealEstate
       "Accept-Language" => "en-US,en;q=0.8,fr;q=0.6,zh-CN;q=0.4,zh;q=0.2,zh-TW;q=0.2"
     }
 
-    def self.districts
-      HTMLBuilder.get(ROOT + "/")
+    def districts
+      get(ROOT + "/")
     end
 
     # parameter exmpale:
@@ -24,9 +24,9 @@ module RealEstate
     #   "freetext" => "D28 Seletar / Yio Chu Kang",
     #   "district_code[]" => "D28"
     # }
-    def self.pages_count(district)
-      query = HTMLBuilder.query_str(district)
-      HTMLBuilder.get(ROOT + "/singapore-property-listing/property-for-sale?" + query)
+    def pages_count(district)
+      query = query_str(district)
+      get(ROOT + "/singapore-property-listing/property-for-sale?" + query)
     end
 
     # parameter example:
@@ -34,23 +34,23 @@ module RealEstate
     # district is like above example
     # 
     # page = 1
-    def self.page(district, page)
+    def page(district, page)
       raise "variable: district, must be a hash" unless district.kind_of?(Hash)
-      query = HTMLBuilder.query_str(district)
-      HTMLBuilder.get(ROOT + "/singapore-property-listing/property-for-sale/#{page}?" + query)
+      query = query_str(district)
+      get(ROOT + "/singapore-property-listing/property-for-sale/#{page}?" + query)
     end
 
-    def self.property(id)
-      HTMLBuilder.get(ROOT + "/listing/" + "#{id}")
+    def property(id)
+      get(ROOT + "/listing/" + "#{id}")
     end
 
     private
 
-    def self.query_str(ahash)
+    def query_str(ahash)
       ahash.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}"}.join("&")
     end
 
-    def self.get(url)
+    def get(url)
       sleep(Random.new.rand(3..5))
 
       if RealEstate::FIDDLER_PROXY_ENABLED
