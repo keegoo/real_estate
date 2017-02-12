@@ -14,6 +14,8 @@ module RealEstate
       @type = hash[:type]
       @tenure = hash[:tenure]
       @href = hash[:href]
+
+      
     end
 
     def to_json
@@ -35,7 +37,7 @@ module RealEstate
     def self.get_property_from_html(htmlstr)
       id = location = type = tenure = href = ""
       doc = Nokogiri::HTML(htmlstr)
-      doc.at_css('li.listing-item').each do |attr_name, attr_value|
+      doc.at_css('div.listing-img').each do |attr_name, attr_value|
         if attr_name == "class"
           # <li class="listing-item featured-listing  listing-id-12547831 ">
           attr_value.split(" ").each do |x|
