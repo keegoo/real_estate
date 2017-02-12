@@ -32,9 +32,9 @@ module RealEstate
       property_features(html)
     end
 
-    def self.get_property_from_html(html)
+    def self.get_property_from_html(htmlstr)
       id = location = type = tenure = href = ""
-      doc = Nokogiri::HTML(html)
+      doc = Nokogiri::HTML(htmlstr)
       doc.at_css('li.listing-item').each do |attr_name, attr_value|
         if attr_name == "class"
           # <li class="listing-item featured-listing  listing-id-12547831 ">

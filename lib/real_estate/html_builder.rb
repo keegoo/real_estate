@@ -24,7 +24,7 @@ module RealEstate
     #   "freetext" => "D28 Seletar / Yio Chu Kang",
     #   "district_code[]" => "D28"
     # }
-    def pages_count(district)
+    def total_page(district)
       query = query_str(district)
       get(ROOT + "/singapore-property-listing/property-for-sale?" + query)
     end
