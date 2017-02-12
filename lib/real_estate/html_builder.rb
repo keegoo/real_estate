@@ -1,5 +1,7 @@
 require 'httparty'
 require 'cgi'
+require 'logger'
+require 'watir'
 
 module RealEstate
   class HTMLBuilder
@@ -13,8 +15,12 @@ module RealEstate
       "Accept-Language" => "en-US,en;q=0.8,fr;q=0.6,zh-CN;q=0.4,zh;q=0.2,zh-TW;q=0.2"
     }
 
+    def initialize
+      @browser = Watir::Browser.new :chrome
+    end
+
     def districts
-      get(ROOT + "/")
+      get(ROOT + "/", 'input[type=submit][value=Search]')
     end
 
     # parameter exmpale:
@@ -50,19 +56,29 @@ module RealEstate
       ahash.map{|k, v| "#{CGI::escape(k)}=#{CGI::escape(v)}"}.join("&")
     end
 
-    def get(url)
+    def get(url, csscheck=nil)
       sleep(Random.new.rand(3..5))
 
-      if RealEstate::FIDDLER_PROXY_ENABLED
-        options = {
-          http_proxyaddr: "127.0.0.1",
-          http_proxyport: "8888",
-          headers: HEADERS
-        }
-        HTTParty.get(url, options)
-      else
-        HTTParty.get(url)
+      @browser.goto url
+      if csscheck
+        @browser.element(css: csscheck).wait_until_present
       end
+      @browser.html
     end
+
+    # def get(url)
+    #   sleep(Random.new.rand(3..5))
+
+    #   if RealEstate::FIDDLER_PROXY_ENABLED
+    #     options = {
+    #       http_proxyaddr: "127.0.0.1",
+    #       http_proxyport: "8888",
+    #       headers: HEADERS
+    #     }
+    #     HTTParty.get(url, options)
+    #   else
+    #     HTTParty.get(url)
+    #   end
+    # end
   end
 end

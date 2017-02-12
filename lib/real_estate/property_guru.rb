@@ -27,11 +27,16 @@ module RealEstate
       x
     end
 
+    # ------------------
+    # when you search a district, you'll get a page 
+    # of properties. And hundreds pages.
     def total_page(district)
       Nokogiri::HTML(@html.total_page)
       doc.at_css('h1.search-title span').text.delete(",").to_i
     end
 
+    # ------------------
+    # get properties in specific page of district
     def properties(district, page_num)
       x
       doc = Nokogiri::HTML(@html.page(district, page_num))
